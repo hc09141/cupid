@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StartMenu : MonoBehaviour {
+public class LevelStart : MonoBehaviour {
 	public AudioSource StartSound;
 
 	void Awake() {
@@ -12,10 +12,6 @@ public class StartMenu : MonoBehaviour {
 
 	public void StartPressed() {
 		StartSound.Play ();
-		SceneManager.LoadScene ("LevelOneStart");
-	}
-
-	public void QuitPressed() {
-		Application.Quit ();
+		SceneManager.LoadScene ("LevelUI");
 	}
 }
