@@ -13,6 +13,10 @@ public class GreyPersonAnimationController : MonoBehaviour {
     Vector2 smoothDeltaPosition = Vector2.zero;
     Vector2 velocity = Vector2.zero;
 
+    private bool crossing = false;
+
+    float linkTrav = 0;
+
     public void Start() {
         walkAnimator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent> ();
@@ -36,45 +40,43 @@ public class GreyPersonAnimationController : MonoBehaviour {
         walkAnimator.SetFloat("Speed", x ? 0 : 2);
         // prevents odd stuff over links
         if(agent.isOnOffMeshLink) {
-            if (worldDeltaPosition.magnitude > agent.radius * 1)
-                agent.isStopped = true;
-            else
-                agent.isStopped = false;
-        } else {
-            agent.isStopped = false;
-        }
-               // Pull agent towards character
-        if (worldDeltaPosition.magnitude > agent.radius * 2)
-            agent.nextPosition = transform.position + 0.9f*worldDeltaPosition;
-    }
-
-    IEnumerator OffMeshLinkStart(){
-        NavMeshAgent agent = GetComponent<NavMeshAgent>();
-        agent.autoTraverseOffMeshLink = false;
-        while (true){
-            if (agent.isOnOffMeshLink) {
-                Debug.Log("On link");
-                yield return StartCoroutine(NormalSpeed(agent));
-                agent.CompleteOffMeshLink();
+            OffMeshLinkData data = agent.currentOffMeshLinkData;
+            if (data.valid) {
+                if (!crossing  && worldDeltaPosition.magnitude < 0.5f) {
+                    Debug.Log("Starting");
+                    agent.nextPosition = data.endPos;
+                    agent.isStopped = true;
+                    //agent.updatePosition = false;
+                    crossing = true;
+                } else if (crossing) {
+                    agent.transform.position = Vector3.Lerp(data.startPos, data.endPos, linkTrav);
+                    linkTrav += 0.005f;
+                    agent.transform.rotation = Quaternion.LookRotation(agent.nextPosition - transform.position, Vector3.up);
+                        //agent.nextPosition = Vector3.Lerp(data.startPos, data.endPos, linkTrav);
+                    }
+                
+        
+            //if (worldDeltaPosition.magnitude > agent.radius)
+            //    agent.isStopped = true;
+            //else
+            //    agent.isStopped = false;
+                if((data.endPos - transform.position).magnitude < 1f) {
+                    Debug.Log("Complete");
+                    agent.CompleteOffMeshLink();
+                    agent.isStopped = false;
+                    //agent.updatePosition = true;
+                    crossing = false;
+                    linkTrav = 0;
+                }
             }
-            yield return null;
+        } else {
+            //agent.isStopped = false;
+        }
+        // Pull agent towards character
+        if (worldDeltaPosition.magnitude > agent.radius * 1.5f) {
+            agent.nextPosition = transform.position + 0.9f * worldDeltaPosition;
         }
     }
-
-    IEnumerator NormalSpeed(NavMeshAgent agent)
-    {
-        OffMeshLinkData data = agent.currentOffMeshLinkData;
-        Vector3 endPos = data.endPos + Vector3.up * agent.baseOffset;
-        while ((agent.transform.position - endPos).magnitude < 0.001f){
-            Debug.Log("Moving along");
-            agent.transform.position = Vector3.MoveTowards(agent.transform.position, endPos, agent.speed * Time.deltaTime * 0.001f);
-            yield return null;
-        }
-        Debug.Log("Crossed");
-        agent.CompleteOffMeshLink();
-    }
-
-
 
    void OnAnimatorMove (){
         // Update position to agent position

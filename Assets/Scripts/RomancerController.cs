@@ -9,7 +9,7 @@ public class RomancerController : MonoBehaviour {
     public bool startsMoving = true;
     private NavMeshAgent agent;
     
-    private float buildingDistance = 1000;
+    private float buildingDistance = 10;
 
     int count = 0;
 
@@ -34,18 +34,17 @@ public class RomancerController : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
         Debug.DrawLine(transform.position, agent.destination, Color.red);
-	    if(count > 3 && cdTime < Time.time && !agent.isOnOffMeshLink) {
+	    if(count >= 5  && cdTime < Time.time && !agent.isOnOffMeshLink) {
             Debug.Log("Crossing road");
             CrossRoad();
-            cdTime = Time.time + 10;
             avoiding = true;
+            cdTime = Time.time + 10;
         }
         if((agent.destination - agent.nextPosition).magnitude < 1f) {
             if(avoiding) {
                 agent.SetDestination(transform.position + originalDir * 20);
                 avoiding = false;
             } else {
-                Debug.Log("wah");
                 agent.SetDestination(overallDestination);
             }
         }
@@ -70,11 +69,15 @@ public class RomancerController : MonoBehaviour {
         if(rightCast && rightHit.transform.CompareTag("Buildings") && rightHit.distance < buildingDistance) {
             agent.SetDestination(NearestPointOnMesh(leftHit.point));
         }
+        if(leftCast && leftHit.transform.CompareTag("Buildings") && leftHit.distance < buildingDistance) {
+            agent.SetDestination(NearestPointOnMesh(rightHit.point));
+        }
+
     }
 
     void OnTriggerEnter(Collider col) {
         count++;
-        Debug.Log("Enter " + count);
+        Debug.Log("Count " + count);
     }
 
     void OnTriggerExit(Collider col) {
