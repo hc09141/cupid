@@ -27,7 +27,11 @@ public class RomancerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         originalDir = transform.forward;
-        overallDestination = transform.position + originalDir * 40;
+        if(startsMoving) {
+            overallDestination = transform.position + originalDir * 40;
+        } else {
+            overallDestination = transform.position;
+        }
         
         Debug.DrawLine(transform.position, overallDestination, Color.red, 5);
 
@@ -90,15 +94,28 @@ public class RomancerController : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider col) {
-        count++;
+        HandleUndesirables(col.gameObject);
+        Debug.Log(col.gameObject.name);
+        if(!col.gameObject.CompareTag("Buildings"))
+            count++;
     }
 
     void OnTriggerExit(Collider col) {
-        count--;
+        if(!col.gameObject.CompareTag("Buildings"))
+            count--;
     }
 
 
     void HandleUndesirables(GameObject o) {
+        if(o.GetComponent<Expartner>() != null) {
+            BadEffects();
+            Debug.Log("GAME OVER :( ");
+        }
+        if(o.GetComponent<RomancerController>() != null) {
+            agent.SetDestination(o.transform.position);
+            Debug.Log("Round win!");
+            effects.HappyEffects();
+        }
     }
 
 }

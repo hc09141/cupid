@@ -14,6 +14,7 @@ public class GreyPersonAnimationController : MonoBehaviour {
     Vector2 velocity = Vector2.zero;
 
     private bool crossing = false;
+    public bool ragdolled = false;
 
     float linkTrav = 0;
 
@@ -49,18 +50,20 @@ public class GreyPersonAnimationController : MonoBehaviour {
                     //agent.updatePosition = false;
                     crossing = true;
                 } else if (crossing) {
-                    agent.transform.position = Vector3.Lerp(data.startPos, data.endPos, linkTrav);
-                    linkTrav += 0.005f;
-                    agent.transform.rotation = Quaternion.LookRotation(agent.nextPosition - transform.position, Vector3.up);
-                        //agent.nextPosition = Vector3.Lerp(data.startPos, data.endPos, linkTrav);
-                    }
+                    //agent.transform.position = Vector3.Lerp(data.startPos, data.endPos, linkTrav);
+                    //linkTrav += 0.005f;
+                    agent.transform.position = Vector3.MoveTowards(agent.transform.position, data.endPos, agent.speed * Time.deltaTime * 0.5f);
+                    agent.transform.rotation = Quaternion.LookRotation(data.endPos - transform.position, Vector3.up);
+                    //agent.nextPosition = Vector3.Lerp(data.startPos, data.endPos, linkTrav);
+                    Debug.DrawLine(data.endPos, transform.position, Color.cyan);
+                }
                 
         
             //if (worldDeltaPosition.magnitude > agent.radius)
             //    agent.isStopped = true;
             //else
             //    agent.isStopped = false;
-                if((data.endPos - transform.position).magnitude < 1f) {
+                if((data.endPos - transform.position).magnitude < 1f && crossing) {
                     Debug.Log("Complete");
                     agent.CompleteOffMeshLink();
                     agent.isStopped = false;
@@ -69,8 +72,6 @@ public class GreyPersonAnimationController : MonoBehaviour {
                     linkTrav = 0;
                 }
             }
-        } else {
-            //agent.isStopped = false;
         }
         // Pull agent towards character
         if (worldDeltaPosition.magnitude > agent.radius * 1.5f) {
@@ -78,6 +79,18 @@ public class GreyPersonAnimationController : MonoBehaviour {
         }
     }
 
+    public void Ragdoll(Vector3 force) {
+        if(!ragdolled) {
+            GetComponent<Animator>().enabled = false;
+            agent.enabled = false;
+            transform.position += Vector3.up;
+            ragdolled = true;
+            Rigidbody[] rbs = GetComponentsInChildren<Rigidbody>();
+            foreach(Rigidbody rb in rbs) {
+                rb.AddForce(force);
+            }
+        }
+    }
    void OnAnimatorMove (){
         // Update position to agent position
         Vector3 position = walkAnimator.rootPosition;

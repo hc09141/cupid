@@ -7,6 +7,7 @@ public class RomancerEffects : MonoBehaviour {
     public ParticleSystem angry;
     public ParticleSystem clouds;
     public ParticleSystem rain;
+    public ParticleSystem happy;
 
     public void CauseAngry() {
         angry.Play();
@@ -15,5 +16,12 @@ public class RomancerEffects : MonoBehaviour {
     public void CloudsPlay() {
         clouds.Play();
         rain.Play();
+    }
+
+    public void HappyEffects() {
+        angry.Stop();
+        clouds.Stop();
+        rain.Stop();
+        happy.Play();
     }
 }
