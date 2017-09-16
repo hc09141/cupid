@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 63c6a439ae81442c394d327c7ef4e257
-timeCreated: 1505512438
+guid: 31d06ceed27b041b1b823b6584021cb9
+timeCreated: 1505533190
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
@@ -274,18 +274,18 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: Character1_C(Clone)
+    - name: Character1_E3(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Group9312
-      parentName: Character1_C(Clone)
+      parentName: Character1_E3(Clone)
       position: {x: -0, y: 2.0870376, z: 0}
       rotation: {x: 0.000000081460335, y: 0, z: -0, w: 1}
       scale: {x: 100, y: 100, z: 100}
     - name: metarig
-      parentName: Character1_C(Clone)
+      parentName: Character1_E3(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
       scale: {x: 238.34798, y: 238.34798, z: 238.34798}
