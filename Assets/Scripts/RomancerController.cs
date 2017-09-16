@@ -95,7 +95,7 @@ public class RomancerController : MonoBehaviour {
 
     void OnTriggerEnter(Collider col) {
         HandleUndesirables(col.gameObject);
-        Debug.Log(col.gameObject.name);
+        //Debug.Log(count + " " + col.gameObject.name );
         if(!col.gameObject.CompareTag("Buildings"))
             count++;
     }
@@ -109,7 +109,7 @@ public class RomancerController : MonoBehaviour {
     void HandleUndesirables(GameObject o) {
         if(o.GetComponent<Expartner>() != null) {
             BadEffects();
-            Debug.Log("GAME OVER :( ");
+            Debug.Log("GAME OVER :(");
         }
         if(o.GetComponent<RomancerController>() != null) {
             agent.SetDestination(o.transform.position);

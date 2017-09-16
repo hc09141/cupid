@@ -42,12 +42,14 @@ public class GreyPersonAnimationController : MonoBehaviour {
         // prevents odd stuff over links
         if(agent.isOnOffMeshLink) {
             OffMeshLinkData data = agent.currentOffMeshLinkData;
-            if (data.valid) {
-                if (!crossing  && worldDeltaPosition.magnitude < 0.5f) {
+            if (data.valid || true) {
+                if (!crossing  && worldDeltaPosition.magnitude < 1f) {
                     Debug.Log("Starting");
                     agent.nextPosition = data.endPos;
                     agent.isStopped = true;
                     //agent.updatePosition = false;
+                    crossing = true;
+                } else if(!crossing) {
                     crossing = true;
                 } else if (crossing) {
                     //agent.transform.position = Vector3.Lerp(data.startPos, data.endPos, linkTrav);
@@ -58,12 +60,7 @@ public class GreyPersonAnimationController : MonoBehaviour {
                     Debug.DrawLine(data.endPos, transform.position, Color.cyan);
                 }
                 
-        
-            //if (worldDeltaPosition.magnitude > agent.radius)
-            //    agent.isStopped = true;
-            //else
-            //    agent.isStopped = false;
-                if((data.endPos - transform.position).magnitude < 1f && crossing) {
+                if((data.endPos - transform.position).magnitude < 0.5f && crossing) {
                     Debug.Log("Complete");
                     agent.CompleteOffMeshLink();
                     agent.isStopped = false;

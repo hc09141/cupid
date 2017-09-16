@@ -29,8 +29,9 @@ public class CrowdSim : MonoBehaviour {
 			while (StartSpawn == EndSpawn) { // ensures start and end spawn points are different
 				EndSpawn = random.Next (0, SpawnPoints.Length);
 			}
-			GameObject SpawnedCharacter = (GameObject) Instantiate (CharacterToSpawn, SpawnPoints[StartSpawn]); // places at start point
+			GameObject SpawnedCharacter = (GameObject) Instantiate (CharacterToSpawn); // places at start point
 			SpawnedCharacter.transform.position = SpawnPoints[StartSpawn].position;
+            SpawnedCharacter.transform.rotation = SpawnPoints[StartSpawn].rotation;
 			SpawnedCharacter.GetComponent<movery>().goal = SpawnPoints [EndSpawn];
 			NavMeshAgent agent = SpawnedCharacter.GetComponent<NavMeshAgent>();
 			agent.SetDestination (SpawnPoints [EndSpawn].position);
