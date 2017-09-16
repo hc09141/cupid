@@ -4,18 +4,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class StartMenu : MonoBehaviour {
+	public AudioSource StartSound;
 
-	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	void Awake() {
+		DontDestroyOnLoad (StartSound);
 	}
 
 	public void StartPressed() {
-		SceneManager.LoadScene ("LevelOne");
+		StartSound.Play ();
+		SceneManager.LoadScene ("LevelOneStart");
 	}
 
 	public void QuitPressed() {
