@@ -29,50 +29,73 @@ public class GreyPersonAnimationController : MonoBehaviour {
     }
 
     public void FixedUpdate() {
-        Vector3 worldDeltaPosition = agent.nextPosition - transform.position;
-        float dx = Vector3.Dot (transform.right, worldDeltaPosition);
-        float dy = Vector3.Dot (transform.forward, worldDeltaPosition);
-        Vector2 deltaPosition = new Vector2 (dx, dy);
-        float smooth = Mathf.Min(1.0f, Time.deltaTime/0.15f);
-        smoothDeltaPosition = Vector2.Lerp (smoothDeltaPosition, deltaPosition, smooth);
-        if (Time.deltaTime > 1e-5f)
-            velocity = smoothDeltaPosition / Time.deltaTime;
-        bool x = (agent.velocity.magnitude < 1f && !agent.isOnOffMeshLink) || (agent.destination - transform.position).magnitude < 0.5f;
-        walkAnimator.SetFloat("Speed", x ? 0 : 2);
-        // prevents odd stuff over links
-        if(agent.isOnOffMeshLink) {
-            OffMeshLinkData data = agent.currentOffMeshLinkData;
-            if (data.valid || true) {
-                if (!crossing  && worldDeltaPosition.magnitude < 1f) {
-                    Debug.Log("Starting");
-                    agent.nextPosition = data.endPos;
-                    agent.isStopped = true;
-                    //agent.updatePosition = false;
-                    crossing = true;
-                } else if(!crossing) {
-                    crossing = true;
-                } else if (crossing) {
-                    //agent.transform.position = Vector3.Lerp(data.startPos, data.endPos, linkTrav);
-                    //linkTrav += 0.005f;
-                    agent.transform.position = Vector3.MoveTowards(agent.transform.position, data.endPos, agent.speed * Time.deltaTime * 0.5f);
-                    agent.transform.rotation = Quaternion.LookRotation(data.endPos - transform.position, Vector3.up);
-                    //agent.nextPosition = Vector3.Lerp(data.startPos, data.endPos, linkTrav);
-                    Debug.DrawLine(data.endPos, transform.position, Color.cyan);
-                }
-                
-                if((data.endPos - transform.position).magnitude < 0.5f && crossing) {
-                    Debug.Log("Complete");
-                    agent.CompleteOffMeshLink();
-                    agent.isStopped = false;
-                    crossing = false;
-                    //agent.updatePosition = true;
-                    linkTrav = 0;
+        if (ragdolled){
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if(rb.velocity.magnitude < 10f){
+                rb.isKinematic = true;
+                rb.useGravity = false;
+                Rigidbody[] rbs = GetComponentsInChildren<Rigidbody>();
+                foreach(Rigidbody r in rbs){
+                    r.useGravity = false;
+                    r.isKinematic = true;
                 }
             }
-        }
-        // Pull agent towards character
-        if (worldDeltaPosition.magnitude > agent.radius * 1.5f) {
-            agent.nextPosition = transform.position + 0.9f * worldDeltaPosition;
+        }else {
+
+            Vector3 worldDeltaPosition = agent.nextPosition - transform.position;
+            float dx = Vector3.Dot(transform.right, worldDeltaPosition);
+            float dy = Vector3.Dot(transform.forward, worldDeltaPosition);
+            Vector2 deltaPosition = new Vector2(dx, dy);
+            float smooth = Mathf.Min(1.0f, Time.deltaTime / 0.15f);
+            smoothDeltaPosition = Vector2.Lerp(smoothDeltaPosition, deltaPosition, smooth);
+            if (Time.deltaTime > 1e-5f)
+                velocity = smoothDeltaPosition / Time.deltaTime;
+            bool x = (agent.velocity.magnitude < 1f && !agent.isOnOffMeshLink) || (agent.destination - transform.position).magnitude < 0.5f;
+            walkAnimator.SetFloat("Speed", x ? 0 : 2);
+            // prevents odd stuff over links
+            if (agent.isOnOffMeshLink)
+            {
+                OffMeshLinkData data = agent.currentOffMeshLinkData;
+                if (data.valid || true)
+                {
+                    if (!crossing && worldDeltaPosition.magnitude < 1f)
+                    {
+                        Debug.Log("Starting");
+                        agent.nextPosition = data.endPos;
+                        agent.isStopped = true;
+                        //agent.updatePosition = false;
+                        crossing = true;
+                    }
+                    else if (!crossing)
+                    {
+                        crossing = true;
+                    }
+                    else if (crossing)
+                    {
+                        //agent.transform.position = Vector3.Lerp(data.startPos, data.endPos, linkTrav);
+                        //linkTrav += 0.005f;
+                        agent.transform.position = Vector3.MoveTowards(agent.transform.position, data.endPos, agent.speed * Time.deltaTime * 0.5f);
+                        agent.transform.rotation = Quaternion.LookRotation(data.endPos - transform.position, Vector3.up);
+                        //agent.nextPosition = Vector3.Lerp(data.startPos, data.endPos, linkTrav);
+                        Debug.DrawLine(data.endPos, transform.position, Color.cyan);
+                    }
+
+                    if ((data.endPos - transform.position).magnitude < 0.5f && crossing)
+                    {
+                        Debug.Log("Complete");
+                        agent.CompleteOffMeshLink();
+                        agent.isStopped = false;
+                        crossing = false;
+                        //agent.updatePosition = true;
+                        linkTrav = 0;
+                    }
+                }
+            }
+            // Pull agent towards character
+            if (worldDeltaPosition.magnitude > agent.radius * 1.5f)
+            {
+                agent.nextPosition = transform.position + 0.9f * worldDeltaPosition;
+            }
         }
     }
 

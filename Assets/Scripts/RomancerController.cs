@@ -94,28 +94,38 @@ public class RomancerController : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider col) {
-        HandleUndesirables(col.gameObject);
+        count+=HandleUndesirables(col.gameObject);
         //Debug.Log(count + " " + col.gameObject.name );
         if(!col.gameObject.CompareTag("Buildings"))
             count++;
     }
 
     void OnTriggerExit(Collider col) {
-        if(!col.gameObject.CompareTag("Buildings"))
+        count -= HandleUndesirables(col.gameObject);
+        if (!col.gameObject.CompareTag("Buildings"))
             count--;
     }
 
-
-    void HandleUndesirables(GameObject o) {
+    // returns additional stress of seeing this thing
+    int HandleUndesirables(GameObject o) {
+        if (o.GetComponent<Clipboarder>() != null)
+        {
+            Debug.Log("WAH");
+            return 4;
+        }
         if(o.GetComponent<Expartner>() != null) {
             BadEffects();
             Debug.Log("GAME OVER :(");
+            return 10;
         }
         if(o.GetComponent<RomancerController>() != null) {
+            overallDestination = o.transform.position;
             agent.SetDestination(o.transform.position);
             Debug.Log("Round win!");
             effects.HappyEffects();
+            return -10;
         }
+        return 0;
     }
 
 }
