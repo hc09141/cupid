@@ -40,15 +40,21 @@ public class GreyPersonAnimationController : MonoBehaviour {
         if (Time.deltaTime > 1e-5f)
             velocity = smoothDeltaPosition / Time.deltaTime;
         //Vector3 dirVec = Quaternion.AngleAxis(desiredDirection, Vector3.up) * Vector3.forward;
-        walkAnimator.SetFloat("Speed", agent.remainingDistance);
+        //walkAnimator.SetFloat("Speed", Mathf.Round(agent.velocity.magnitude));
+        bool x = (agent.velocity.magnitude < 1f && !agent.isOnOffMeshLink) || (agent.destination - transform.position).magnitude < 0.5f;
+        walkAnimator.SetFloat("Speed", x ? 0 : 2);
+        // prevents odd stuff over links
+        if(agent.isOnOffMeshLink) {
+            if (worldDeltaPosition.magnitude > agent.radius * 1)
+                agent.isStopped = true;
+            else
+                agent.isStopped = false;
+        } else {
+            agent.isStopped = false;
+        }
+
         //if (worldDeltaPosition.magnitude > agent.radius)
         //    transform.position = agent.nextPosition - 0.9f * worldDeltaPosition;
-        if (worldDeltaPosition.magnitude > agent.radius)
-            //    agent.nextPosition = transform.position + 0.9f * worldDeltaPosition;
-            agent.isStopped = true;
-        else
-            agent.isStopped = false;
-
         if (agent.isOnOffMeshLink) {
                 Debug.Log("On link");
 
