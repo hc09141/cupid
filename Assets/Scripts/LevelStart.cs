@@ -12,6 +12,6 @@ public class LevelStart : MonoBehaviour {
 
 	public void StartPressed() {
 		StartSound.Play ();
-		SceneManager.LoadScene ("LevelOne");
+		SceneManager.LoadScene ("LevelUI");
 	}
 }
