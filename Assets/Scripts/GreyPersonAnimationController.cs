@@ -17,14 +17,7 @@ public class GreyPersonAnimationController : MonoBehaviour {
         walkAnimator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent> ();
         agent.updatePosition = false;
-        //StartCoroutine(OffMeshLinkStart());
     }
-
-    //public void SetDirection(Vector3 vec) {
-    //    Vector3 right = Vector3.Cross(Vector3.up, Vector3.right);
-    //    Vector3 forward = Vector3.Cross(Vector3.right, Vector3.up);
-    //    desiredDirection = Mathf.Atan2(Vector3.Dot(vec, right), Vector3.Dot(vec, forward));
-    //}
 
     public void SetSpeed(float speed) {
         walkAnimator.SetFloat("Speed", speed);
@@ -39,8 +32,6 @@ public class GreyPersonAnimationController : MonoBehaviour {
         smoothDeltaPosition = Vector2.Lerp (smoothDeltaPosition, deltaPosition, smooth);
         if (Time.deltaTime > 1e-5f)
             velocity = smoothDeltaPosition / Time.deltaTime;
-        //Vector3 dirVec = Quaternion.AngleAxis(desiredDirection, Vector3.up) * Vector3.forward;
-        //walkAnimator.SetFloat("Speed", Mathf.Round(agent.velocity.magnitude));
         bool x = (agent.velocity.magnitude < 1f && !agent.isOnOffMeshLink) || (agent.destination - transform.position).magnitude < 0.5f;
         walkAnimator.SetFloat("Speed", x ? 0 : 2);
         // prevents odd stuff over links
@@ -52,13 +43,9 @@ public class GreyPersonAnimationController : MonoBehaviour {
         } else {
             agent.isStopped = false;
         }
-
-        //if (worldDeltaPosition.magnitude > agent.radius)
-        //    transform.position = agent.nextPosition - 0.9f * worldDeltaPosition;
-        if (agent.isOnOffMeshLink) {
-                Debug.Log("On link");
-
-        }
+               // Pull agent towards character
+        if (worldDeltaPosition.magnitude > agent.radius * 2)
+            agent.nextPosition = transform.position + 0.9f*worldDeltaPosition;
     }
 
     IEnumerator OffMeshLinkStart(){
