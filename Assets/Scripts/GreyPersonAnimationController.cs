@@ -56,7 +56,7 @@ public class GreyPersonAnimationController : MonoBehaviour {
         //if (worldDeltaPosition.magnitude > agent.radius)
         //    transform.position = agent.nextPosition - 0.9f * worldDeltaPosition;
         if (agent.isOnOffMeshLink) {
-                Debug.Log("On link");
+                //Debug.Log("On link");
 
         }
     }
