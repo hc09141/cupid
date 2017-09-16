@@ -17,9 +17,13 @@ public class RomancerController : MonoBehaviour {
 
     bool avoiding = false;
 
+    int stress = 0;
+
     private Vector3 overallDestination;
     private Vector3 originalDir;
 
+
+    private RomancerEffects effects;
 	// Use this for initialization
 	void Start () {
         originalDir = transform.forward;
@@ -29,14 +33,16 @@ public class RomancerController : MonoBehaviour {
 
 	    agent = GetComponent<NavMeshAgent> ();	
         agent.SetDestination(NearestPointOnMesh(overallDestination));
+
+        effects = GetComponentInChildren<RomancerEffects>();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
         Debug.DrawLine(transform.position, agent.destination, Color.red);
 	    if(count >= 5  && cdTime < Time.time && !agent.isOnOffMeshLink) {
-            Debug.Log("Crossing road");
             CrossRoad();
+            BadEffects();
             avoiding = true;
             cdTime = Time.time + 10;
         }
@@ -49,6 +55,14 @@ public class RomancerController : MonoBehaviour {
             }
         }
 	}
+
+    void BadEffects() {
+        stress++;
+        effects.CauseAngry();
+        if(stress >= 2) {
+            effects.CloudsPlay();
+        }
+    }
 
     Vector3 NearestPointOnMesh(Vector3 point) {
         NavMeshHit hit;
@@ -77,12 +91,14 @@ public class RomancerController : MonoBehaviour {
 
     void OnTriggerEnter(Collider col) {
         count++;
-        Debug.Log("Count " + count);
     }
 
     void OnTriggerExit(Collider col) {
         count--;
     }
 
+
+    void HandleUndesirables(GameObject o) {
+    }
 
 }

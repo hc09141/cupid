@@ -64,8 +64,8 @@ public class GreyPersonAnimationController : MonoBehaviour {
                     Debug.Log("Complete");
                     agent.CompleteOffMeshLink();
                     agent.isStopped = false;
-                    //agent.updatePosition = true;
                     crossing = false;
+                    //agent.updatePosition = true;
                     linkTrav = 0;
                 }
             }
