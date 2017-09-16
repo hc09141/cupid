@@ -55,10 +55,11 @@ public class RomancerController : MonoBehaviour {
         effects = GetComponentInChildren<RomancerEffects>();
 	}
 	
-	// Update is called once per frame
 	void FixedUpdate () {
         Debug.DrawLine(transform.position, agent.destination, Color.red);
-	    if(count >= 5  && cdTime < Time.time && !agent.isOnOffMeshLink) {
+        if (count >= 5  && cdTime < Time.time && !agent.isOnOffMeshLink) {
+            count = 0;
+            Debug.Log("Crossing");
             CrossRoad();
             BadEffects();
             avoiding = true;
@@ -104,14 +105,15 @@ public class RomancerController : MonoBehaviour {
         if(leftCast && leftHit.transform.CompareTag("Buildings") && leftHit.distance < buildingDistance) {
             agent.SetDestination(NearestPointOnMesh(rightHit.point));
         }
-
     }
 
     void OnTriggerEnter(Collider col) {
-        count+=HandleUndesirables(col.gameObject);
+        count+=HandleUndesirables(col.gameObject) * 2;
+        Debug.Log(col.name + " " + count);
         //Debug.Log(count + " " + col.gameObject.name );
         if(!col.gameObject.CompareTag("Buildings"))
             count++;
+
     }
 
     void OnTriggerExit(Collider col) {
@@ -124,14 +126,13 @@ public class RomancerController : MonoBehaviour {
     int HandleUndesirables(GameObject o) {
         if (o.GetComponent<Clipboarder>() != null)
         {
-            Debug.Log("WAH");
             return 4;
-        }
+        } else
         if(o.GetComponent<Expartner>() != null) {
             BadEffects();
             Debug.Log("GAME OVER :(");
             return 10;
-        }
+        } else
         if(o.GetComponent<RomancerController>() != null) {
             overallDestination = o.transform.position;
             agent.SetDestination(o.transform.position);

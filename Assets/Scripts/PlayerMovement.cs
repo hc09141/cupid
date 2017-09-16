@@ -13,24 +13,26 @@ public class PlayerMovement : MonoBehaviour {
 		goal = agent.transform.position;
     }
 
-    void Update() {
-		if (Input.GetButtonDown("Fire1"))
-		{
-			RaycastHit hit;
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			if (Physics.Raycast (ray, out hit)) {
-				goal = NearestPointOnMesh(hit.point);
-			}
-		}
+    public void SetGoal(Vector3 goal){
+        agent.destination = NearestPointOnMesh(goal);
+    }
 
-		agent.destination = goal; 
+    void Update() {
+		//if (Input.GetButtonDown("Fire1")){
+		//	RaycastHit hit;
+		//	Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		//	if (Physics.Raycast (ray, out hit)) {
+		//		goal = NearestPointOnMesh(hit.point);
+		//	}
+		//}
+
+		//agent.destination = goal; 
     }
 
 	Vector3 NearestPointOnMesh(Vector3 point) {
 		NavMeshHit hit;
 		if (NavMesh.SamplePosition(point, out hit, 1.0f, NavMesh.AllAreas)) {
 			return hit.position;
-			//Debug.DrawLine(transform.position, hit.position, Color.red, 5);
 		}
 		return point;
 	}
