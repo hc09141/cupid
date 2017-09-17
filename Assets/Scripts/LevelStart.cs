@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelStart : MonoBehaviour {
 	public AudioSource StartSound;
+	public string NextScene;
 
 	void Awake() {
 		DontDestroyOnLoad (StartSound);
@@ -12,6 +13,6 @@ public class LevelStart : MonoBehaviour {
 
 	public void StartPressed() {
 		StartSound.Play ();
-		SceneManager.LoadScene ("LevelUI");
+		SceneManager.LoadScene (NextScene);
 	}
 }
