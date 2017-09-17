@@ -7,10 +7,12 @@ using UnityEngine.AI;
 public class ActionController : MonoBehaviour {
 
     public GameObject clipboarder;
+    private float nextTime = 0;
 
     void Update(){
-        if (Input.GetButtonDown("Fire1")){
+        if (Input.GetButtonDown("Fire1") && Time.time > nextTime || (Input.GetButtonDown("Fire1") && Input.GetKey(KeyCode.LeftShift))){
             RaycastHit hit;
+            nextTime = Time.time + 5;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit)){
                 SpawnClipboarder(hit.point);

@@ -119,14 +119,14 @@ public class RomancerController : MonoBehaviour {
     void OnTriggerEnter(Collider col) {
         count+=HandleUndesirables(col.gameObject) * 2;
         //Debug.Log(count + " " + col.gameObject.name );
-        if(!col.gameObject.CompareTag("Buildings"))
+        if (col.transform.root.gameObject.GetComponent<GreyPersonAnimationController>() != null)
             count++;
 
     }
 
     void OnTriggerExit(Collider col) {
         count -= HandleUndesirables(col.gameObject);
-        if (!col.gameObject.CompareTag("Buildings"))
+        if (col.transform.root.gameObject.GetComponent<GreyPersonAnimationController>() != null)
             count--;
     }
 

@@ -13,6 +13,7 @@ public class movery : MonoBehaviour {
     }
 
     void Update() {
+        if(agent.isOnNavMesh)
         agent.destination = goal.position; 
     }
 }
