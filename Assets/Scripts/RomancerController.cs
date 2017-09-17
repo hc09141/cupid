@@ -9,6 +9,7 @@ public class RomancerController : MonoBehaviour {
 
     public bool startsMoving = true;
 	public string SuccessScene;
+	public string FailureScene;
     private NavMeshAgent agent;
     public Transform desiredLocation;
     
@@ -138,7 +139,8 @@ public class RomancerController : MonoBehaviour {
         } else
         if(o.GetComponent<Expartner>() != null) {
             BadEffects();
-            Debug.Log("GAME OVER :(");
+			Failure.Play ();
+				Invoke ("fail", 2);
             return 10;
         } else
         if(o.GetComponent<RomancerController>() != null) {
@@ -147,7 +149,7 @@ public class RomancerController : MonoBehaviour {
             agent.SetDestination(o.transform.position);
             if(Success != null)
 			Success.Play ();
-			Invoke( "success", 10 );
+			Invoke( "success", 5 );
             effects.HappyEffects();
             return -10;
         }
@@ -156,6 +158,10 @@ public class RomancerController : MonoBehaviour {
 
 	void success() {
 		SceneManager.LoadScene (SuccessScene);
+	}
+
+	void fail() {
+		SceneManager.LoadScene (FailureScene);
 	}
 
 }

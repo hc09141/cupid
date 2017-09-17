@@ -13,7 +13,11 @@ public class LevelSuccessMenu : MonoBehaviour {
 
 	public void StartPressed() {
 		StartSound.Play ();
-		SceneManager.LoadScene (NextScene);
+		if (SceneManager.GetActiveScene ().name == "LevelTwoSuccess") {
+			Application.OpenURL ("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+		} else {
+			SceneManager.LoadScene (NextScene);
+		}
 	}
 
 	public void QuitPressed() {
