@@ -2,13 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 [RequireComponent (typeof (NavMeshAgent))]
 public class RomancerController : MonoBehaviour {
 
     public bool startsMoving = true;
+	public string SuccessScene;
     private NavMeshAgent agent;
     
+	public AudioSource Theme;
+	public AudioSource Success;
+	public AudioSource Failure;
+
     private float buildingDistance = 10;
 
     int count = 0;
@@ -24,6 +30,14 @@ public class RomancerController : MonoBehaviour {
 
 
     private RomancerEffects effects;
+
+	void Awake() {
+		Success.Play ();
+		Success.Pause ();
+		DontDestroyOnLoad (Success);
+		DontDestroyOnLoad (Failure);
+	}
+
 	// Use this for initialization
 	void Start () {
         originalDir = transform.forward;
@@ -121,11 +135,16 @@ public class RomancerController : MonoBehaviour {
         if(o.GetComponent<RomancerController>() != null) {
             overallDestination = o.transform.position;
             agent.SetDestination(o.transform.position);
-            Debug.Log("Round win!");
+			Success.Play ();
+			Invoke( "success", 10 );
             effects.HappyEffects();
             return -10;
         }
         return 0;
     }
+
+	void success() {
+		SceneManager.LoadScene (SuccessScene);
+	}
 
 }
