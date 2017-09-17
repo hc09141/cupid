@@ -17,7 +17,7 @@ public class RomancerController : MonoBehaviour {
 	public AudioSource Success;
 	public AudioSource Failure;
 
-    private float buildingDistance = 10;
+    public float buildingDistance = 20;
 
     int count = 0;
 
@@ -26,6 +26,7 @@ public class RomancerController : MonoBehaviour {
     bool avoiding = false;
 
     int stress = 0;
+    float timer = 0;
 
     private Vector3 overallDestination;
     private Vector3 originalDir;
@@ -83,13 +84,21 @@ public class RomancerController : MonoBehaviour {
                 agent.SetDestination(overallDestination);
             }
         }
-	}
+
+        if (timer > 0) timer -= Time.fixedDeltaTime;
+    }
 
     void BadEffects() {
         stress++;
-        effects.CauseAngry();
-        if(stress >= 2) {
-            effects.CloudsPlay();
+       
+        if (timer <= 0.05)
+        {
+            timer = 2;
+            effects.CauseAngry();
+            if (stress >= 2)
+            {
+                effects.CloudsPlay();
+            }
         }
     }
 
