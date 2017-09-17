@@ -1,16 +1,22 @@
 fileFormatVersion: 2
-guid: 4fc25d612ad88b6499bdab6df55e04a4
-timeCreated: 1505537663
+guid: 06a63e0f5e7b342c488a78653b7b722c
+timeCreated: 1505604246
 licenseType: Free
 ModelImporter:
-  serializedVersion: 19
+  serializedVersion: 21
   fileIDToRecycleName:
     100000: //RootNode
+    100002: CarBody
+    100004: Wheels
     400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Plane.053
-    4300002: Plane.069
+    400002: CarBody
+    400004: Wheels
+    2300000: CarBody
+    2300002: Wheels
+    3300000: CarBody
+    3300002: Wheels
+    4300000: CarBody
+    4300002: Wheels
   materials:
     importMaterials: 1
     materialName: 0
@@ -33,6 +39,7 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
+    extraUserProperties: []
     clipAnimations: []
     isReadable: 1
   meshes:
@@ -40,7 +47,10 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    importVisibility: 1
     importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -56,6 +66,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
+    normalCalculationMode: 4
   importAnimation: 1
   copyAvatar: 0
   humanDescription:

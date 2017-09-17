@@ -109,7 +109,6 @@ public class RomancerController : MonoBehaviour {
 
     void OnTriggerEnter(Collider col) {
         count+=HandleUndesirables(col.gameObject) * 2;
-        Debug.Log(col.name + " " + count);
         //Debug.Log(count + " " + col.gameObject.name );
         if(!col.gameObject.CompareTag("Buildings"))
             count++;

@@ -6,16 +6,24 @@ using UnityEngine.AI;
 public class CarScript : MonoBehaviour {
 
     public bool moving = false;
-
+    public float maxDist = 100;
+    public float speed = 10;
+    private Vector3 op;
 	// Use this for initialization
 	void Start () {
-		
+        op = transform.position;
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        if(moving)
-            transform.position += transform.forward * Time.deltaTime * 10;
+        if (moving)
+        {
+            transform.position += transform.forward * Time.deltaTime * speed;
+            if(Vector3.Distance(op, transform.position) > maxDist)
+            {
+                transform.position = op;
+            }
+        }
 	}
 
     void OnTriggerEnter(Collider col) {

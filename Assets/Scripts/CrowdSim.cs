@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine.AI;
 
 public class CrowdSim : MonoBehaviour {
-	public GameObject CharacterToSpawn;
+	public GameObject[] CharacterToSpawn;
 	public double SpawnTime;
 
 	private Transform[] SpawnPoints;
@@ -29,7 +29,8 @@ public class CrowdSim : MonoBehaviour {
 			while (StartSpawn == EndSpawn) { // ensures start and end spawn points are different
 				EndSpawn = random.Next (0, SpawnPoints.Length);
 			}
-			GameObject SpawnedCharacter = (GameObject) Instantiate (CharacterToSpawn); // places at start point
+            GameObject toSpawn = CharacterToSpawn[random.Next(0, CharacterToSpawn.Length)];
+			GameObject SpawnedCharacter = (GameObject) Instantiate (toSpawn); // places at start point
 			SpawnedCharacter.transform.position = SpawnPoints[StartSpawn].position;
             SpawnedCharacter.transform.rotation = SpawnPoints[StartSpawn].rotation;
 			SpawnedCharacter.GetComponent<movery>().goal = SpawnPoints [EndSpawn];
