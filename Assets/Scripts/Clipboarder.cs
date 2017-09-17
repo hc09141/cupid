@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Clipboarder : MonoBehaviour {
+	public GameObject Clips;
+	public int Delay;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	private float NextTime = -20;
+
+	void Start() {
+		AudioSource[] Sass = Clips.GetComponentsInChildren<AudioSource> ();
+		AudioSource temp = Sass[Random.Range(0, Sass.Length)];
+		temp.Play ();
 	}
 }
