@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent (typeof (NavMeshAgent))]
@@ -12,6 +13,9 @@ public class GreyPersonAnimationController : MonoBehaviour {
     private NavMeshAgent agent;
     Vector2 smoothDeltaPosition = Vector2.zero;
     Vector2 velocity = Vector2.zero;
+	public string DeathScene;
+	public AudioSource Theme;
+	public AudioSource DeathSound;
 
     private bool crossing = false;
     public bool ragdolled = false;
@@ -22,6 +26,7 @@ public class GreyPersonAnimationController : MonoBehaviour {
         walkAnimator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent> ();
         agent.updatePosition = false;
+		DontDestroyOnLoad (DeathSound);
     }
 
     public void SetSpeed(float speed) {
@@ -101,6 +106,11 @@ public class GreyPersonAnimationController : MonoBehaviour {
 
     public void Ragdoll(Vector3 force) {
         if(!ragdolled) {
+			if (GetComponent<RomancerController> () != null) {
+				DeathSound.Play();
+				Theme.Stop ();
+				Invoke ("Die", 4);
+			}
             GetComponent<Animator>().enabled = false;
             agent.enabled = false;
             transform.position += Vector3.up;
@@ -117,5 +127,9 @@ public class GreyPersonAnimationController : MonoBehaviour {
         position.y = agent.nextPosition.y;
         transform.position = position;
     }
+
+	void Die() {
+		SceneManager.LoadScene (DeathScene);
+	}
 }
 
