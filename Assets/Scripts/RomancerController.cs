@@ -10,6 +10,7 @@ public class RomancerController : MonoBehaviour {
     public bool startsMoving = true;
 	public string SuccessScene;
     private NavMeshAgent agent;
+    public Transform desiredLocation;
     
 	public AudioSource Theme;
 	public AudioSource Success;
@@ -32,8 +33,11 @@ public class RomancerController : MonoBehaviour {
     private RomancerEffects effects;
 
 	void Awake() {
-		Success.Play ();
-		Success.Pause ();
+        if (Success != null)
+        {
+            Success.Play();
+            Success.Pause();
+        }
 		DontDestroyOnLoad (Success);
 		DontDestroyOnLoad (Failure);
 	}
@@ -42,7 +46,12 @@ public class RomancerController : MonoBehaviour {
 	void Start () {
         originalDir = transform.forward;
         if(startsMoving) {
-            overallDestination = transform.position + originalDir * 40;
+            if (desiredLocation != null)
+            {
+                overallDestination = desiredLocation.position;
+            }else {
+                overallDestination = transform.position + originalDir * 40;
+            }
         } else {
             overallDestination = transform.position;
         }
@@ -133,8 +142,10 @@ public class RomancerController : MonoBehaviour {
             return 10;
         } else
         if(o.GetComponent<RomancerController>() != null) {
+            Debug.Log("You win");
             overallDestination = o.transform.position;
             agent.SetDestination(o.transform.position);
+            if(Success != null)
 			Success.Play ();
 			Invoke( "success", 10 );
             effects.HappyEffects();

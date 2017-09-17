@@ -27,6 +27,9 @@ public class CarScript : MonoBehaviour {
 	}
 
     void OnTriggerEnter(Collider col) {
+        if(col is BoxCollider){
+            return;
+        }
         GameObject root = col.transform.root.gameObject;
         if(root.GetComponent<GreyPersonAnimationController>() != null) {
             root.GetComponent<GreyPersonAnimationController>().Ragdoll(transform.forward * 5);
